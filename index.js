@@ -19,19 +19,30 @@ app.post("/signup", function(req, res){
 
 });
 
-app.post("/signin", function(req, res){
+app.post("/user/signin", function(req, res){
+
+    res.json({
+        message: "Signed up successfully"
+    })
+});
+
+app.post("/user/purchases", function(req, res){
+
+    res.json({
+        message: "Signed up successfully"
+    })
 
 });
 
-app.post("/signup", function(req, res){
+app.post("/course/purchase", function(req, res){
+
+    res.json({
+        message: "Signed up successfully"
+    })
 
 });
 
-app.post("/signup", function(req, res){
-
-});
-
-app.post("/signup", function(req, res){
+app.post("/courses", function(req, res){
 
 });
 
