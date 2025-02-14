@@ -1,8 +1,8 @@
 const { Router } = require("express");
-
 const courseRouter = Router();
+const {courseModel} = require("../db");
 
-courseRouter.post("/course/purchase", function(req, res){
+courseRouter.post("/purchase", function(req, res){
 
     res.json({
         message: "Signed up successfully"
@@ -10,10 +10,10 @@ courseRouter.post("/course/purchase", function(req, res){
 
 });
 
-courseRouter.post("/courses/preview", function(req, res){
+courseRouter.post("/preview", function(req, res){
 
 });
 
-module.exports({
+module.exports = {
     courseRouter: courseRouter
-});
+};
