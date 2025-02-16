@@ -4,14 +4,17 @@ const { userRouter } = require("./routes/users");
 const { courseRouter } = require("./routes/courses")
 const { adminRouter } = require("./routes/admin")
 const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const { z } = require("zod");
+const jwtsecret = "shristiisbeautiful";
 
 const app = express();
 app.use(express.json());//allows parsing the json data
 
-
-app.use("/user", userRouter);
-app.use("/admin", adminRouter);
-app.use("/course", courseRouter);
+app.use("/api/v1/user", userRouter);
+app.use("/api/v1/admin", adminRouter);
+app.use("/api/v1/course", courseRouter);
 
 async function main(){
     await mongoose.connect("mongodb+srv://gupta02utkarsh:Utkarsh%401234@cluster0.kytwn.mongodb.net/courseSeller");

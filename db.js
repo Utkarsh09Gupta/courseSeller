@@ -7,7 +7,6 @@ const ObjectId = mongoose.Types.ObjectId;
 // const z = require("zod");
 // we are writing Schema which is clas so we should initialize an intance of the class
 const userSchema = new Schema({
-    _id : ObjectId,
     email: String,
     password: String,
     firstName: String,
@@ -15,7 +14,6 @@ const userSchema = new Schema({
 });
 
 const adminSchema = new Schema({
-    _id: ObjectId,
     email: String,
     password: String,
     firstName: String,
@@ -23,7 +21,6 @@ const adminSchema = new Schema({
 });
 
 const courseSchema = new Schema({
-    _id: ObjectId,
     title: String,
     description: String,
     price: String,
@@ -31,7 +28,7 @@ const courseSchema = new Schema({
 });
 
 const purchaseSchema = new Schema({
-    _id: ObjectId,
+    userId: ObjectId,
     courseId: ObjectId,    
 });
 
