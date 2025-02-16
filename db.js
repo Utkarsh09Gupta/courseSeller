@@ -5,7 +5,6 @@ const Schema = mongoose.Schema;
 const ObjectId = mongoose.Types.ObjectId;
 // const {Schema} = require("mongoose"); // all two lines could be written as
 // const z = require("zod");
-mongoose.connect("mongodb+srv://gupta02utkarsh:Utkarsh%401234@cluster0.kytwn.mongodb.net/courseSeller");
 // we are writing Schema which is clas so we should initialize an intance of the class
 const userSchema = new Schema({
     _id : ObjectId,
@@ -33,20 +32,18 @@ const courseSchema = new Schema({
 
 const purchaseSchema = new Schema({
     _id: ObjectId,
-    courseId: ObjectId,
-    description: ObjectId
-    
+    courseId: ObjectId,    
 });
 
 // we will use thses as export data
-const userModule = mongoose.model("user", userSchema);
-const adminModule = mongoose.model("admin", adminSchema);
-const courseModule = mongoose.model("course", courseSchema);
-const purchaseModule = mongoose.model("purchase", purchaseSchema);
+const userModel = mongoose.model("user", userSchema);
+const adminModel = mongoose.model("admin", adminSchema);
+const courseModel = mongoose.model("course", courseSchema);
+const purchaseModel = mongoose.model("purchase", purchaseSchema);
 
 module.exports = {
-    userModule,
-    adminModule,
-    courseModule,
-    purchaseModule
+    userModel,
+    adminModel,
+    courseModel,
+    purchaseModel
 }
