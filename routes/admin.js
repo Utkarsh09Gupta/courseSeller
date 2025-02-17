@@ -60,7 +60,7 @@ adminRouter.post("/signin", async (req, res) =>{
         req.json({message:"invalid credentials"})
     }
     //jwt.sign(payload, secret, [option, callback])
-    const token = jwt.sign({id: admin._id.toString()}, adminSecret, {expiresIn: "1h"})
+    const token = jwt.sign({id: admin._id.toString()}, JWT_ADMIN_PASSWORD, {expiresIn: "1h"})
     res.json({
         token: token,
         message: "signed in successfully"
@@ -75,7 +75,6 @@ adminRouter.post("/course",adminMiddleware, async (req, res) =>{
         description: z.string(),
         imgageUrl: z.string(),
         price: z.number(),
-        creatorId: z.object()
     });
     const parsedData = requiredData.safeParse(req.body);    
     const {title, description, imageUrl, price } = req.body;
@@ -101,28 +100,39 @@ adminRouter.post("/course",adminMiddleware, async (req, res) =>{
 });
 //editing the current course by id, updateOne, updateMany
 adminRouter.put("/course",adminMiddleware, async (req, res) =>{
-    const courseId = req.courseId;
-    const {title, description, imageUrl, price} = req.body;     
+    const adminId = req.userId;
+    const {title, description, imageUrl, price, courseId} = req.body;     
 
-    const updateCourse = await courseModel.findByIdAndUpdate({
-        courseId: courseId,
-        {ti}
-    })
-    if(!updateCourse){
+    try{
+        const updateCourse = await courseModel.updateOne({
+            _id: courseId,
+            creatorId: adminId
+        },{
+            title: title,
+            description: description,
+            imageUrl: imageUrl,
+            price: price    
+        })
         res.json({
-            message: "course not found"
+            message: "course updated",
+            courseId: updateCourse._id
+        })
+    }catch(e){
+        res.status(403).json({
+            message: "updation failed"
         })
     }
+}); 
 
-    res.json({
-        message: "hi there"
+adminRouter.get("/course/bulk",adminMiddleware, async (req, res) =>{
+    const adminId = req.uesrId;
+    const allCourses = await courseModel.find({
+        creatorId: adminId
     })
-});
-
-adminRouter.get("/course/bulk", (req, res) =>{
     res.json({
-        message: "hi there"
-    })
+        message: "all courses",
+        allCourses
+    })    
 });
 module.exports = {
     adminRouter: adminRouter

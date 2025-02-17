@@ -3,9 +3,10 @@ const { Router } = require("express");// Router start with capital leeter but it
 const userRouter = Router();
 const {z} = require("zod");
 const bcrypt = require("bcrypt");
-const {userModel} = require("../db");
+const {userModel, courseModel} = require("../db");
 const jwt = require("jsonwebtoken");
 const { JWT_USER_PASSWORD } = require("../config");// const { purchaesModel} = require("../db");
+const { userMiddleware } = require("../middleware/user");
 
 // userRouter.use(express.json());//no need for this because this only runs after index.js
 userRouter.post("/signup", async function(req, res){
@@ -61,10 +62,10 @@ userRouter.post("/signin", async function(req, res){
     const passwordCheck = await bcrypt.compare(password, user.password);    
     //after password check we create jwt for the user
     if(!passwordCheck){
-        req.json({message:"invalid credentials"})
+        res.json({message:"invalid credentials"})
     }
     //jwt.sign(payload, secret, [option, callback])
-    const token = jwt.sign({id: user._id.toString()}, userSecret, {expiresIn: "1h"});
+    const token = jwt.sign({id: user._id.toString()}, JWT_USER_PASSWORD, {expiresIn: "1h"});
     res.json({
         token: token,
         message: "signed in successfully"
@@ -78,10 +79,14 @@ userRouter.post("/course", (req, res) =>{
     })
 });
 
-userRouter.get("/purchases", function(req, res){
+userRouter.get("/purchase",userMiddleware, async function(req, res){
+    const userId = req.userId;
 
+    const course = await courseModel.find({
+        userId
+    })
     res.json({
-        message: "Signed up successfully"
+        course
     })
 
 });

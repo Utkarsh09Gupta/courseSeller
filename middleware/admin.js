@@ -6,7 +6,7 @@ function adminMiddleware(req, res, next){
     const decoded = jwt.verify(token, JWT_ADMIN_PASSWORD);
     
     if(decoded){
-        req.adminId = decoded.id;
+        req.userId = decoded.id;
         next();
     }else{
         res.json({
@@ -15,7 +15,7 @@ function adminMiddleware(req, res, next){
     }
 
 }
-
+ 
 module.exports = {
     adminMiddleware: adminMiddleware
 }

@@ -1,4 +1,5 @@
 const express = require("express");
+require('dotenv').config();
 // using routing and 
 const { userRouter } = require("./routes/users");
 const { courseRouter } = require("./routes/courses")
@@ -13,7 +14,7 @@ app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/course", courseRouter);
 
 async function main(){
-    await mongoose.connect("");
+    await mongoose.connect(process.env.MONGO_URL);
     app.listen(3000);
     console.log("listening");
 }
