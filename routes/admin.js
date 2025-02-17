@@ -3,8 +3,9 @@ const adminRouter = Router();
 const {z} = require("zod");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const jwtsecret = "shristiisbeautiful";
-const {adminModel} = require("../db");
+const { JWT_ADMIN_PASSWORD } = require("../config");
+const {adminModel, courseModel} = require("../db");
+const { adminMiddleware } = require("../middleware/admin");
 
 // adminRouter.use(adminMiddleware);
 adminRouter.post("/signup", async (req, res) =>{
@@ -59,7 +60,7 @@ adminRouter.post("/signin", async (req, res) =>{
         req.json({message:"invalid credentials"})
     }
     //jwt.sign(payload, secret, [option, callback])
-    const token = jwt.sign({id: admin._id.toString()}, jwtsecret, {expiresIn: "1h"})
+    const token = jwt.sign({id: admin._id.toString()}, adminSecret, {expiresIn: "1h"})
     res.json({
         token: token,
         message: "signed in successfully"
@@ -67,13 +68,52 @@ adminRouter.post("/signin", async (req, res) =>{
 
 });
 
-adminRouter.post("/course", (req, res) =>{
-    res.json({
-        message: "hi there"
-    })
-});
+adminRouter.post("/course",adminMiddleware, async (req, res) =>{
+    const adminId = req.userId;
+    const requiredData = z.object({
+        title: z.string(),
+        description: z.string(),
+        imgageUrl: z.string(),
+        price: z.number(),
+        creatorId: z.object()
+    });
+    const parsedData = requiredData.safeParse(req.body);    
+    const {title, description, imageUrl, price } = req.body;
+    //creating the database model for courses
+    try{
+       const course = await courseModel.create({
+            title: title,
+            description: description,
+            price: price,
+            imageUrl: imageUrl,
+            creatorId: adminId
+        });
 
-adminRouter.put("/course", (req, res) =>{
+        res.json({
+            message: "Course created Successfully",
+            courseId: course._id
+        })
+    }catch(e){
+        res.json({
+            message: "failed"
+        })
+    }
+});
+//editing the current course by id, updateOne, updateMany
+adminRouter.put("/course",adminMiddleware, async (req, res) =>{
+    const courseId = req.courseId;
+    const {title, description, imageUrl, price} = req.body;     
+
+    const updateCourse = await courseModel.findByIdAndUpdate({
+        courseId: courseId,
+        {ti}
+    })
+    if(!updateCourse){
+        res.json({
+            message: "course not found"
+        })
+    }
+
     res.json({
         message: "hi there"
     })

@@ -5,8 +5,7 @@ const {z} = require("zod");
 const bcrypt = require("bcrypt");
 const {userModel} = require("../db");
 const jwt = require("jsonwebtoken");
-const jwtsecret = "shristiisbeautiful";
-// const { purchaesModel} = require("../db");
+const { JWT_USER_PASSWORD } = require("../config");// const { purchaesModel} = require("../db");
 
 // userRouter.use(express.json());//no need for this because this only runs after index.js
 userRouter.post("/signup", async function(req, res){
@@ -65,7 +64,7 @@ userRouter.post("/signin", async function(req, res){
         req.json({message:"invalid credentials"})
     }
     //jwt.sign(payload, secret, [option, callback])
-    const token = jwt.sign({id: user._id.toString()}, jwtsecret, {expiresIn: "1h"});
+    const token = jwt.sign({id: user._id.toString()}, userSecret, {expiresIn: "1h"});
     res.json({
         token: token,
         message: "signed in successfully"

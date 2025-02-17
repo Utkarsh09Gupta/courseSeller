@@ -3,7 +3,7 @@ const courseRouter = Router();
 const {courseModel} = require("../db");
 
 courseRouter.post("/purchase", function(req, res){
-
+    
     res.json({
         message: "Signed up successfully"
     })

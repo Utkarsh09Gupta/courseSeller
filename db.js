@@ -7,14 +7,14 @@ const ObjectId = mongoose.Types.ObjectId;
 // const z = require("zod");
 // we are writing Schema which is clas so we should initialize an intance of the class
 const userSchema = new Schema({
-    email: String,
+    email: {type: String, unique: true},
     password: String,
     firstName: String,
     lastName: String
 });
 
 const adminSchema = new Schema({
-    email: String,
+    email: {type: String, unique: true},
     password: String,
     firstName: String,
     lastName: String
@@ -24,6 +24,7 @@ const courseSchema = new Schema({
     title: String,
     description: String,
     price: String,
+    imageUrl: String,
     creatorId: ObjectId
 });
 
