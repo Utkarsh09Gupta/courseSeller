@@ -3,7 +3,7 @@ const { Router } = require("express");// Router start with capital leeter but it
 const userRouter = Router();
 const {z} = require("zod");
 const bcrypt = require("bcrypt");
-const {userModel, courseModel} = require("../db");
+const {userModel, courseModel, purchaseModel} = require("../db");
 const jwt = require("jsonwebtoken");
 const { JWT_USER_PASSWORD } = require("../config");// const { purchaesModel} = require("../db");
 const { userMiddleware } = require("../middleware/user");
@@ -73,20 +73,15 @@ userRouter.post("/signin", async function(req, res){
 
 });
 
-userRouter.post("/course", (req, res) =>{
-    res.json({
-        message: "hi there"
-    })
-});
-
-userRouter.get("/purchase",userMiddleware, async function(req, res){
+userRouter.get("/purchases",userMiddleware, async function(req, res){
     const userId = req.userId;
 
-    const course = await courseModel.find({
+    const purchases = await purchaseModel.find({
         userId
-    })
+    });
+
     res.json({
-        course
+        purchases
     })
 
 });

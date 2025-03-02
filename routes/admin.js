@@ -69,7 +69,7 @@ adminRouter.post("/signin", async (req, res) =>{
 });
 
 adminRouter.post("/course",adminMiddleware, async (req, res) =>{
-    const adminId = req.userId;
+    const adminId = req.userId;//getting id from middleware
     const requiredData = z.object({
         title: z.string(),
         description: z.string(),
@@ -127,7 +127,7 @@ adminRouter.put("/course",adminMiddleware, async (req, res) =>{
 adminRouter.get("/course/bulk",adminMiddleware, async (req, res) =>{
     const adminId = req.uesrId;
     const allCourses = await courseModel.find({
-        creatorId: adminId
+        adminId
     })
     res.json({
         message: "all courses",
